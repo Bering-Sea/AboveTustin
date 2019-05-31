@@ -3,6 +3,8 @@
 #
 # kevinabrandon@gmail.com
 #
+# BeinnLora 31/5/19 migrated to Chrome webdriver instead of PhantomJS
+# apt-get chromium-driver on RPI is sufficient
 
 import sys
 import time
@@ -12,6 +14,7 @@ from selenium.common import exceptions as seleniumexceptions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 from configparser import ConfigParser
 
 import util
@@ -92,7 +95,12 @@ class Dump1090Display(AircraftDisplay):
 
         Returns the browser on success, None on fail.
         '''
-        browser = webdriver.PhantomJS(desired_capabilities={'phantomjs.page.settings.resourceTimeout': '20000'})
+        # Define Chrome webbrowser options. You may need to hard-code the location of the webdriver. 
+        #Installation on RPI via apt-get works out of the box
+        
+        options = Options()
+        options.headless=True
+        browser = webdriver.Chrome(chrome_options=options)
         browser.set_window_size(abovetustin_image_width, abovetustin_image_height)
 
         print("getting web page {}".format(self.url))
@@ -162,7 +170,12 @@ class VRSDisplay(AircraftDisplay):
 
         Returns the browser on success, None on fail.
         '''
-        browser = webdriver.PhantomJS(desired_capabilities={'phantomjs.page.settings.resourceTimeout': '20000'})
+        # Define Chrome webbrowser options. You may need to hard-code the location of the webdriver. 
+        #Installation on RPI via apt-get works out of the box
+        
+        options = Options()
+        options.headless=True
+        browser = webdriver.Chrome(chrome_options=options)
         browser.set_window_size(abovetustin_image_width, abovetustin_image_height)
 
         print("getting web page {}".format(self.url))
