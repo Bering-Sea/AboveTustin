@@ -4,7 +4,7 @@
 # and then loops forever restarting the tracker program if it ever exits.
 #
 
-cd /home/pi/AboveTustin
+cd /home/pi/adsb-receiver/build/abovetustin/AboveTustin
 source py3/bin/activate
 
 
