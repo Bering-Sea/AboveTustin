@@ -5,6 +5,8 @@
 #
 # BeinnLora 31/5/19 migrated to Chrome webdriver instead of PhantomJS
 # apt-get chromium-driver on RPI is sufficient
+# I tried that ^^ and it did not work for me?
+# this is to assist my adsb-receiver install
 
 import sys
 import time
