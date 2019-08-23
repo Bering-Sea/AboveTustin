@@ -6,7 +6,8 @@
 # BeinnLora 31/5/19 migrated to Chrome webdriver instead of PhantomJS
 # apt-get chromium-driver on RPI is sufficient
 # I tried that ^^ and it did not work for me?
-# this is to assist my adsb-receiver install
+# after updating RPI i installed chromedriver by typing sudo apt-get install chromiumdriver
+# this is to assist my adsb-receiver install 
 
 import sys
 import time
@@ -17,6 +18,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from configparser import ConfigParser
 
 import util
@@ -102,7 +104,7 @@ class Dump1090Display(AircraftDisplay):
         
         options = Options()
         options.headless=True
-        browser = webdriver.Chrome(options=options)
+        browser = webdriver.Chrome(options=options, executable_path='/usr/lib/chromium-browser/chromedriver')
         browser.set_window_size(abovetustin_image_width, abovetustin_image_height)
 
         print("getting web page {}".format(self.url))
@@ -177,7 +179,7 @@ class VRSDisplay(AircraftDisplay):
         
         options = Options()
         options.headless=True
-        browser = webdriver.Chrome(options=options)
+        browser = webdriver.Chrome(options=options, executable_path='/usr/lib/chromium-browser/chromedriver')
         browser.set_window_size(abovetustin_image_width, abovetustin_image_height)
 
         print("getting web page {}".format(self.url))
