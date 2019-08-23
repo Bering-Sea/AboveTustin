@@ -102,7 +102,7 @@ class Dump1090Display(AircraftDisplay):
         
         options = Options()
         options.headless=True
-        browser = webdriver.Chrome('/usr/lib/chromium-browser')
+        browser = webdriver.Chrome(options=options)
         browser.set_window_size(abovetustin_image_width, abovetustin_image_height)
 
         print("getting web page {}".format(self.url))
@@ -177,7 +177,7 @@ class VRSDisplay(AircraftDisplay):
         
         options = Options()
         options.headless=True
-        browser = webdriver.Chrome('/usr/lib/chromium-browser')
+        browser = webdriver.Chrome(options=options)
         browser.set_window_size(abovetustin_image_width, abovetustin_image_height)
 
         print("getting web page {}".format(self.url))
