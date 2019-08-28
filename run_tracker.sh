@@ -6,7 +6,6 @@
 # if youre not change directory to cd /home/pi/AboveTustin below
 
 cd /home/pi/adsb-receiver/build/abovetustin/AboveTustin
-source py3/bin/activate
 
 
 while :
