@@ -118,11 +118,11 @@ def Tweet(a, havescreenshot):
 			tweet += " " + hash
 
         # send tweet to twitter!
-        if havescreenshot and a.altitude <= 10000:
+        if havescreenshot and if a.distance < .10 or (a.el > 15 and a.el < 30) and a.altitude <= 10000:
                 with open('tweet.png', "rb") as imagefile:
                 imagedata = imagefile.read()
                 params = {"media[]": imagedata, "status": tweet}
-                elif a.altitude <= 4000:
+                elif a.altitude <= 10000:
                                 twit.statuses.update_with_media(**params)
                         else:
                                 twit.statuses.update(status=tweet)
@@ -167,7 +167,7 @@ if __name__ == "__main__":
 			if a.lat == None or a.lon == None or a.track == None:
 				continue
 			# check to see if it's in the alarm zone:
-			if a.distance < .10 or (a.el > 15 and a.el < 30):
+			if a.distance < .10 or (a.el > 15 and a.el < 30) and a.altitude <= 10000:
 				# add it to the current dictionary
 				current[a.hex] = a 
 				print("{}: {}mi, {}az, {}el, {}alt, {}dB, {}seen".format(
