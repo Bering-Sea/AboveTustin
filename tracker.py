@@ -61,9 +61,9 @@ def Tweet(a, havescreenshot):
                 hashtags.append(" #RedEye")
         if a.altitude < 1000:
                 hashtags.append(" #VFR")
-        if a.altitude >= 1000 and a.altitude < 4500 and (templateArgs['heading'] == "W"):
+        if a.altitude >= 1000 and a.altitude < 4500 and (templateArgs['heading'] == "NE"):
                 hashtags.append(" #Landing05")
-        if a.altitude >= 1000 and a.altitude < 4500 and (templateArgs['heading'] == "E"):
+        if a.altitude >= 1000 and a.altitude < 4500 and (templateArgs['heading'] == "SW"):
                 hashtags.append(" #Landing23")
         if a.speed > 300 and a.speed < 500:
                 hashtags.append(" #Crusing")
