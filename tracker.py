@@ -1,39 +1,4 @@
-#
-# tracker.py
-#
-# kevinabrandon@gmail.com
-#
 
-import sys
-import traceback
-import time
-from time import sleep
-from twitter import *
-from configparser import ConfigParser
-from string import Template
-
-import datasource
-import fa_api
-import flightdata
-import geomath
-import screenshot
-
-# Read the configuration file for this application.
-parser = ConfigParser()
-parser.read('config.ini')
-
-# Assign AboveTustin variables.
-abovetustin_distance_alarm = float(parser.get('abovetustin', 'distance_alarm'))	# The alarm distance in miles.
-abovetustin_elevation_alarm = float(parser.get('abovetustin', 'elevation_alarm'))	# The angle in degrees that indicates if the airplane is overhead or not.
-abovetustin_wait_x_updates = int(parser.get('abovetustin', 'wait_x_updates'))	# Number of updates to wait after the airplane has left the alarm zone before tweeting.
-abovetustin_sleep_time = float(parser.get('abovetustin', 'sleep_time'))		# Time between each loop.
-
-# Assign FlightAware variables.
-fa_enable = parser.getboolean('flightaware', 'fa_enable')
-fa_username = parser.get('flightaware', 'fa_username')
-fa_api_key = parser.get('flightaware', 'fa_api_key')
-
-# Assign Twitter variables.
 twitter_consumer_key = parser.get('twitter', 'consumer_key')
 twitter_consumer_secret = parser.get('twitter', 'consumer_secret')
 twitter_access_token = parser.get('twitter', 'access_token')
