@@ -66,11 +66,11 @@ def Tweet(a, havescreenshot):
         if a.altitude >= 1000 and a.altitude < 4500 and (templateArgs['heading'] == "SW"):
                 hashtags.append(" #Landing23")
         if a.speed > 300 and a.speed < 500:
-                hashtags.append(" #Crusing")
+                hashtags.append(" #Cruising")
         if a.speed >= 500 and a.speed < 770:
                 hashtags.append(" #TailWinds")
         if a.speed >= 700:
-                hashtags.append(" #Rocket?")
+                hashtags.append(" #Fast")
 
 	# add the conditional hashtags as long as there is room in 140 chars
 	for hash in hashtags: 
