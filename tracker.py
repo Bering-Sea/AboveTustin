@@ -1,4 +1,39 @@
+#
+# tracker.py
+#
+# kevinabrandon@gmail.com
+#
 
+import sys
+import traceback
+import time
+from time import sleep
+from twitter import *
+from configparser import ConfigParser
+from string import Template
+
+import datasource
+import fa_api
+import flightdata
+import geomath
+import screenshot
+
+# Read the configuration file for this application.
+parser = ConfigParser()
+parser.read('config.ini')
+
+# Assign AboveTustin variables.
+abovetustin_distance_alarm = float(parser.get('abovetustin', 'distance_alarm'))	# The alarm distance in miles.
+abovetustin_elevation_alarm = float(parser.get('abovetustin', 'elevation_alarm'))	# The angle in degrees that indicates if the airplane is overhead or not.
+abovetustin_wait_x_updates = int(parser.get('abovetustin', 'wait_x_updates'))	# Number of updates to wait after the airplane has left the alarm zone before tweeting.
+abovetustin_sleep_time = float(parser.get('abovetustin', 'sleep_time'))		# Time between each loop.
+
+# Assign FlightAware variables.
+fa_enable = parser.getboolean('flightaware', 'fa_enable')
+fa_username = parser.get('flightaware', 'fa_username')
+fa_api_key = parser.get('flightaware', 'fa_api_key')
+
+# Assign Twitter variables.
 twitter_consumer_key = parser.get('twitter', 'consumer_key')
 twitter_consumer_secret = parser.get('twitter', 'consumer_secret')
 twitter_access_token = parser.get('twitter', 'access_token')
@@ -57,24 +92,26 @@ def Tweet(a, havescreenshot):
 		tweet = Template(parser.get('tweet', 'tweet_template')).substitute(templateArgs)
 	#conditional hashtags:
 	hashtags = []
-        if a.time.hour < 7 or a.time.hour >= 23 or (a.time.weekday() == 7 and a.time.hour < 8):
-                hashtags.append(" #RedEye")
-        if a.altitude < 1000:
-                hashtags.append(" #VFR")
-        if a.altitude >= 1000 and a.altitude < 4500 and (templateArgs['heading'] == "NE"):
-                hashtags.append(" #Landing05")
-        if a.altitude >= 1000 and a.altitude < 4500 and (templateArgs['heading'] == "SW"):
-                hashtags.append(" #Landing23")
-        if a.speed > 300 and a.speed < 500:
-                hashtags.append(" #Cruising")
-        if a.speed >= 500 and a.speed < 770:
-                hashtags.append(" #TailWinds")
-        if a.speed >= 700:
-                hashtags.append(" #Fast")
+	if a.time.hour < 7 or a.time.hour >= 23 or (a.time.weekday() == 7 and a.time.hour < 8):
+		hashtags.append(" #Redeye")
+	if a.altitude < 1000:
+		hashtags.append(" #VFR")
+	if a.altitude >= 1000 and a.altitude < 2500 and (templateArgs['heading'] == "S" or templateArgs['heading'] == "SW"):
+		hashtags.append(" #ProbablyLanding")
+	if a.altitude > 20000 and a.altitude < 35000:
+		hashtags.append(" #BurninFuel")
+	if a.altitude >= 35000:
+		hashtags.append(" #UpHigh")
+	if a.speed > 300 and a.speed < 500:
+		hashtags.append(" #CruiseSpeed")
+	if a.speed >= 500 and a.speed < 770:
+		hashtags.append(" #TailWinds")
+	if a.speed >= 700:
+		hashtags.append(" #HaulinAss")
 
 	# add the conditional hashtags as long as there is room in 140 chars
-	for hash in hashtags: 
-		if len(tweet) + len(hash) <= 280:
+	for hash in hashtags:
+		if len(twee) + len(hash) <= 280:
 			tweet += hash
 
 	# add the default hashtags as long as there is room
@@ -82,19 +119,17 @@ def Tweet(a, havescreenshot):
 		if len(tweet) + len(hash) <= 279:
 			tweet += " " + hash
 
-        # send tweet to twitter!
-        if havescreenshot and if a.distance < .10 or (a.el > 15 and a.el < 30) and a.altitude <= 10000:
-                with open('tweet.png', "rb") as imagefile:
-                imagedata = imagefile.read()
-                params = {"media[]": imagedata, "status": tweet}
-                elif a.altitude <= 10000:
-                                twit.statuses.update_with_media(**params)
-                        else:
-                                twit.statuses.update(status=tweet)
+	# send tweet to twitter!
+	if havescreenshot:
+		with open('tweet.png', "rb") as imagefile:
+			imagedata = imagefile.read()
+		params = {"media[]": imagedata, "status": tweet}
+		twit.statuses.update_with_media(**params)
+	else:
+		twit.statuses.update(status=tweet)
 
-
-# send the tweet to stdout while we're at it
-        print(tweet)
+	# send the tweet to stdout while we're at it
+	print(tweet)
 
 if __name__ == "__main__":
 
@@ -132,9 +167,9 @@ if __name__ == "__main__":
 			if a.lat == None or a.lon == None or a.track == None:
 				continue
 			# check to see if it's in the alarm zone:
-			if a.distance < .10 or (a.el > 15 and a.el < 30) and a.altitude <= 10000:
+			if a.distance < abovetustin_distance_alarm or a.el > abovetustin_elevation_alarm:
 				# add it to the current dictionary
-				current[a.hex] = a 
+				current[a.hex] = a
 				print("{}: {}mi, {}az, {}el, {}alt, {}dB, {}seen".format(
 					a.ident_desc(), "%.1f" % a.distance, "%.1f" % a.az, "%.1f" % a.el,
 					a.altitude, "%0.1f" % a.rssi, "%.1f" % (a.seen or 0)))
