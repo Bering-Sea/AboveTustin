@@ -1,4 +1,4 @@
-#
+   #
 # screenshot.py
 #
 # kevinabrandon@gmail.com
@@ -6,7 +6,7 @@
 # BeinnLora 31/5/19 migrated to Chrome webdriver instead of PhantomJS
 # apt-get chromium-driver on RPI is sufficient
 # I tried that ^^ and it did not work for me?
-# after updating RPI i installed chromedriver by typing sudo apt-get install chromium-driver
+# after updating RPI i installed chromedriver by typing sudo apt-get install chromiumdriver
 # this is to assist my adsb-receiver install 
 
 import sys
@@ -96,7 +96,6 @@ class Dump1090Display(AircraftDisplay):
         loadmap()
         Creates a browser object and loads the webpage.
         It sets up the map to the proper zoom level.
-
         Returns the browser on success, None on fail.
         '''
         # Define Chrome webbrowser options. You may need to hard-code the location of the webdriver. 
@@ -104,7 +103,7 @@ class Dump1090Display(AircraftDisplay):
         
         options = Options()
         options.headless=True
-        browser = webdriver.Chrome(options=options, executable_path='/usr/lib/chromium-browser/chromedriver')
+        browser = webdriver.Chrome(options=options)
         browser.set_window_size(abovetustin_image_width, abovetustin_image_height)
 
         print("getting web page {}".format(self.url))
@@ -128,7 +127,7 @@ class Dump1090Display(AircraftDisplay):
         resetbutton = browser.find_elements_by_xpath("//*[contains(text(), 'Reset Map')]")
         resetbutton[0].click()
 
-        print("zoom in 4 times:")
+        print("zoom in 2 times:")
         try:
             # First look for the Open Layers map zoom button.
             zoomin = browser.find_element_by_class_name('ol-zoom-in')
@@ -139,9 +138,6 @@ class Dump1090Display(AircraftDisplay):
             zoomin = browser.find_elements_by_xpath('//*[@title="Zoom in"]')
             if zoomin:
                 zoomin = zoomin[0]
-        zoomin.click()
-        zoomin.click()
-        zoomin.click()
         zoomin.click()
         self.browser = browser
 
@@ -171,15 +167,14 @@ class VRSDisplay(AircraftDisplay):
         loadmap()
         Creates a browser object and loads the webpage.
         It sets up the map to the proper zoom level.
-
         Returns the browser on success, None on fail.
         '''
-        # Define Chrome webbrowser options. You may need to hard-code the location of the webdriver. 
+        # Define Chrome webbrowser options. You may need to hard-code the location of the webdriver.
         #Installation on RPI via apt-get works out of the box
-        
+
         options = Options()
         options.headless=True
-        browser = webdriver.Chrome(options=options, executable_path='/usr/lib/chromium-browser/chromedriver')
+        browser = webdriver.Chrome(options=options)
         browser.set_window_size(abovetustin_image_width, abovetustin_image_height)
 
         print("getting web page {}".format(self.url))
@@ -208,4 +203,6 @@ class VRSDisplay(AircraftDisplay):
             return self.screenshot('tweet.png')
         except Exception as e:
             util.error("Unable to click on airplane: {}'".format(e))
-            return None
+            return None#
+
+
