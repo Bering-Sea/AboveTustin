@@ -1,4 +1,4 @@
-   #
+#
 # screenshot.py
 #
 # kevinabrandon@gmail.com
