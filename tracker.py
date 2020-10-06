@@ -111,7 +111,7 @@ def Tweet(a, havescreenshot):
 
 	# add the conditional hashtags as long as there is room in 140 chars
 	for hash in hashtags:
-		if len(twee) + len(hash) <= 280:
+		if len(tweet) + len(hash) <= 280:
 			tweet += hash
 
 	# add the default hashtags as long as there is room
